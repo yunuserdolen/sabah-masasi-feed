@@ -22,7 +22,7 @@ Bu bölüm yukarıdaki içerik talimatlarını değiştirmez; yalnızca malzemen
    d. Serbestiyet ve Kafa için güçlü, özgün bir yazı önerisi çıkarılabilecek malzeme var mı?
    e. Günün herkesçe bilinen büyük gelişmelerinden akışa hiç düşmemiş olan var mı? Bariz gündem başlıklarını kendin say ve akışla karşılaştır.
    f. "Bugün yapılacaklar" için takvim okundu mu (Cuma: hafta sonu dahil)?
-5. Tam okuma (web_fetch): analiz, yorum ya da yazı önerisi için özetin yetmediği yazıları tam oku. Google News bağlantıları (news.google.com/rss/articles/…) doğrudan açılmayabilir; bu durumda başlık ve yayın adıyla web_search yapıp asıl bağlantıyı bul.
+5. Tam okuma (web_fetch): analiz, yorum ya da yazı önerisi için özetin yetmediği yazıları tam oku. Akış satırlarında linklerin çoğu kısa referans olarak gelir (`[1004-6eb3d3cb]` gibi); tam okuyacağın öğelerin referanslarını tek bir `get_links` çağrısında topla ve dönen linkleri aç. Referansları bültene yazma. Google News bağlantıları (news.google.com/rss/articles/…) doğrudan açılmayabilir; bu durumda başlık ve yayın adıyla web_search yapıp asıl bağlantıyı bul.
 6. Boşluk doldurma (web_search): yalnızca 4. adımda tespit ettiğin eksikler için, dar ve hedefli sorgularla. Genel "bugünün haberleri" taraması yapma.
 7. Bütçe: varsayılan olarak en fazla yaklaşık 10 web_fetch ve 6 web_search. Kalite gerektiriyorsa aşabilirsin, ama her ek çağrı belirli bir eksikliği kapatmalı.
 8. Akış araçları hata verir ya da boş dönerse, eski yönteme (web_search tabanlı tarama) geç ve bültenin en sonuna tek satırlık bir not düş.

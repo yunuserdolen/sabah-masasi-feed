@@ -3,8 +3,9 @@
 Mimari:
 ```
 GitHub Actions (2 saatte bir, ücretsiz)        Cloudflare Worker (ücretsiz)        Claude
-  collect.py: RSS + Google News + GDELT   →    MCP: sabah_digest, feed_search,  →  Sabah Masası
-  → "data" dalına günlük JSON parçalar         gdelt_search, feed_health            görevi
+  collect.py: RSS + Google News          →    MCP: sabah_digest, feed_search,  →  Sabah Masası
+  → "data" dalına günlük JSON parçalar         gdelt_search, get_links,             görevi
+                                               feed_health
 ```
 
 ## 1. GitHub
