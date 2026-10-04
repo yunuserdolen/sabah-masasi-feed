@@ -117,6 +117,8 @@ def fetch_feed(feed: dict, cfg: dict, now: datetime) -> tuple[list[dict], dict]:
 def fetch_gdelt(cfg: dict, now: datetime) -> tuple[list[dict], list[dict]]:
     g = cfg.get("gdelt") or {}
     items, healths = [], []
+    if not g.get("enabled", True):
+        return items, healths
     for i, q in enumerate(g.get("queries", [])):
         if i:
             time.sleep(12)  # GDELT paylaşımlı IP'lerde sıkı hız sınırı uygular

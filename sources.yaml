@@ -205,6 +205,9 @@ feeds:
 # dillerde tamamlayıcı). Sorgular İngilizce anahtar kelime + sourcelang
 # filtresiyle çalışır; başlıklar özgün dilde gelir. İstekler arası 6 sn.
 gdelt:
+  # GitHub Actions IP'leri GDELT tarafından sürekli 429 ile sınırlanıyor; toplayıcıda kapalı.
+  # GDELT, Worker'daki canlı gdelt_search aracı üzerinden kullanılmaya devam eder.
+  enabled: false
   timespan: 1d
   maxrecords: 40
   queries:
