@@ -20,9 +20,33 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Register workers.dev subdomain if missing
+        working-directory: .
+        run: |
+          API="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/subdomain"
+          AUTH="Authorization: Bearer $CLOUDFLARE_API_TOKEN"
+          CUR=$(curl -sS -H "$AUTH" "$API" | python3 -c "import sys,json; print((json.load(sys.stdin).get('result') or {}).get('subdomain') or '')")
+          if [ -z "$CUR" ]; then
+            curl -sS -X PUT -H "$AUTH" -H "Content-Type: application/json" \
+              -d '{"subdomain":"yunuserdolen"}' "$API" | python3 -c "import sys,json; d=json.load(sys.stdin); print('success:', d.get('success'), d.get('errors'))"
+          else
+            echo "subdomain: $CUR"
+          fi
       - name: Deploy
         run: npx --yes wrangler@4 deploy
       - name: Set ACCESS_KEY
         env:
           ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
         run: printf '%s' "$ACCESS_KEY" | npx --yes wrangler@4 secret put ACCESS_KEY
+      - name: Smoke test
+        working-directory: .
+        env:
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+        run: |
+          API="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/subdomain"
+          SUB=$(curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "$API" | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['subdomain'])")
+          URL="https://sabah-masasi-feed.$SUB.workers.dev"
+          echo "WORKER_URL=$URL"
+          sleep 10
+          curl -sS -X POST "$URL/mcp/$ACCESS_KEY" -H 'Content-Type: application/json' \
+            -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"feed_health","arguments":{}}}' | head -c 600
