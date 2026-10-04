@@ -12,7 +12,7 @@ const TOOLS = [
   {
     name: "sabah_digest",
     description:
-      "Sabah Masası için günün ham malzemesi. Varsayılan: otomatik pencere (Pzt: Cum 06:00→Pzt 06:00, diğer günler: dün 06:00→bugün 06:00, İstanbul) ve günün takvimine göre otomatik bölümler. Bölümler içinde kaynaklar sırayla harmanlanır (denge). Sonda dil/eğilim dağılımı ve EKSİK/BOŞ uyarıları verilir. Satır biçimi: dil|kaynak|eğilim|tarih · başlık — özet · link",
+      "Sabah Masası için günün ham malzemesi. Varsayılan: otomatik pencere (Pzt: Cum 06:00→Pzt 06:00, diğer günler: dün 06:00→bugün 06:00, İstanbul) ve günün takvimine göre otomatik bölümler. Bölümler içinde kaynaklar sırayla harmanlanır (denge). Sonda dil/eğilim dağılımı ve EKSİK/BOŞ uyarıları verilir. Satır biçimi: dil|kaynak|eğilim|tarih · başlık — özet · link. Google News ve uzun linkler kısa referansla verilir ([MMGG-xxxxxxxx]); tam link için get_links.",
     inputSchema: {
       type: "object",
       properties: {
@@ -57,6 +57,18 @@ const TOOLS = [
       },
     },
     annotations: { readOnlyHint: true, openWorldHint: true },
+  },
+  {
+    name: "get_links",
+    description: "Digest/feed_search satırlarındaki kısa referansların ([1004-6eb3d3cb] gibi) tam linklerini verir. Yalnız tam okuma (web_fetch) yapılacak öğeler için çağır.",
+    inputSchema: {
+      type: "object",
+      required: ["refs"],
+      properties: {
+        refs: { type: "array", items: { type: "string" }, maxItems: 40, description: 'Örn: ["1004-6eb3d3cb", "1003-a1b2c3d4"] (köşeli parantezli de olur).' },
+      },
+    },
+    annotations: { readOnlyHint: true, openWorldHint: false },
   },
   {
     name: "feed_health",
@@ -106,8 +118,8 @@ async function handle(msg, env) {
       return ok({
         protocolVersion: PROTOCOLS.includes(req) ? req : PROTOCOLS[0],
         capabilities: { tools: { listChanged: false } },
-        serverInfo: { name: "sabah-masasi-feed", version: "1.0.0" },
-        instructions: "Önce feed_health, sonra sabah_digest. Boşluklar için feed_search ve gdelt_search.",
+        serverInfo: { name: "sabah-masasi-feed", version: "1.1.0" },
+        instructions: "Önce feed_health, sonra sabah_digest. Boşluklar için feed_search ve gdelt_search. Tam okuma gereken öğelerin linkleri için get_links.",
       });
     }
     case "ping":
@@ -133,6 +145,7 @@ async function runTool(name, args, env) {
     case "sabah_digest": return digest(args, env);
     case "feed_search": return search(args, env);
     case "gdelt_search": return gdelt(args);
+    case "get_links": return links(args, env);
     case "feed_health": return health(env);
     default: throw new Error(`Bilinmeyen araç: ${name}`);
   }
@@ -200,9 +213,19 @@ function interleave(items, max) {
   return out;
 }
 
+// Kısa referans: yerel gün (MMGG) + kimliğin ilk 8 hanesi → get_links ile parçadan çözülür.
+const MAX_INLINE_URL = 100;
+function ref(it, tz) {
+  const day = isoDate(Date.parse(it.d) + tz * H);
+  return `${day.slice(5, 7)}${day.slice(8, 10)}-${it.id.slice(0, 8)}`;
+}
+function linkOf(it, tz) {
+  return it.u.includes("news.google.com/") || it.u.length > MAX_INLINE_URL ? `[${ref(it, tz)}]` : it.u;
+}
+
 function line(it, tz, sumChars) {
   const x = sumChars > 0 && it.x ? ` — ${it.x.length > sumChars ? it.x.slice(0, sumChars - 1) + "…" : it.x}` : "";
-  return `- ${it.l}|${it.s}|${it.b}|${fmtLocal(it.d, tz)} · ${it.t}${x} · ${it.u}`;
+  return `- ${it.l}|${it.s}|${it.b}|${fmtLocal(it.d, tz)} · ${it.t}${x} · ${linkOf(it, tz)}`;
 }
 
 // ── Araçlar ─────────────────────────────────────────────────────────
@@ -285,6 +308,38 @@ async function search(args, env) {
   }).sort((a, b) => (a.d < b.d ? 1 : -1)).slice(0, args.max ?? 25);
   if (!hits.length) return `"${args.query}" için son ${days} günde akışta sonuç yok. gdelt_search veya web_search dene.`;
   return `"${args.query}" · ${hits.length} sonuç\n` + hits.map((it) => line(it, tz, 110)).join("\n");
+}
+
+async function links(args, env) {
+  const cfg = await getJSON(env, "config.json");
+  const tz = cfg?.tz_offset_hours ?? 3;
+  const nowL = Date.now() + tz * H;
+  const year = new Date(nowL).getUTCFullYear();
+  const wanted = new Map(); // gün → [{ref, pfx}]
+  const bad = [];
+  for (const raw of args.refs || []) {
+    const r = String(raw).trim().replace(/^\[|\]$/g, "");
+    const m = /^(\d{2})(\d{2})-([0-9a-f]{4,12})$/i.exec(r);
+    if (!m) { bad.push(r); continue; }
+    let day = `${year}-${m[1]}-${m[2]}`;
+    if (Date.parse(day) > nowL + DAY) day = `${year - 1}-${m[1]}-${m[2]}`; // yılbaşı geçişi
+    if (!wanted.has(day)) wanted.set(day, []);
+    wanted.get(day).push({ ref: r, pfx: m[3].toLowerCase() });
+  }
+  if (!wanted.size) throw new Error(`Geçerli referans yok (biçim: MMGG-xxxxxxxx)${bad.length ? `: ${bad.join(", ")}` : ""}`);
+  const days = [...wanted.keys()];
+  const shards = await Promise.all(days.map((d) => getJSON(env, `${d}.json`)));
+  const out = [];
+  days.forEach((d, i) => {
+    const items = shards[i]?.items || [];
+    for (const { ref: r, pfx } of wanted.get(d)) {
+      const it = items.find((x) => x.id.startsWith(pfx));
+      if (it) out.push(`- [${r}] ${it.s} · ${it.t} · ${it.u}`);
+      else bad.push(r);
+    }
+  });
+  if (bad.length) out.push(`Bulunamadı: ${bad.join(", ")} (parça silinmiş ya da referans hatalı olabilir; başlık ve yayın adıyla web_search yap).`);
+  return out.join("\n");
 }
 
 async function gdelt(args) {
