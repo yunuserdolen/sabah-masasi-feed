@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2025-09-01"
 
 [vars]
-# KULLANICI ve REPO'yu kendi GitHub bilgilerinle değiştir.
+# Veri dalının adresi (public repo).
 DATA_BASE = "https://raw.githubusercontent.com/yunuserdolen/sabah-masasi-feed/data"
 
 # Gizli değerler (dosyaya yazılmaz):
