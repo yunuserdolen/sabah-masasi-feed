@@ -36,7 +36,7 @@ const TOOLS = [
       required: ["query"],
       properties: {
         query: { type: "string", description: "Tüm kelimeler eşleşmeli (büyük/küçük harf ve aksan duyarsız)." },
-        days: { type: "integer", default: 3, minimum: 1, maximum: 9 },
+        days: { type: "integer", default: 3, minimum: 1, maximum: 5 },
         langs: { type: "array", items: { type: "string" } },
         max: { type: "integer", default: 25, minimum: 1, maximum: 60 },
       },
@@ -221,9 +221,14 @@ async function digest(args, env) {
     return `${DAYS_TR[w.wd]} ${w.edition}: takvimde bugün için bölüm yok (bülten hafta içi). Gerekirse sections parametresiyle iste.`;
   }
 
-  const maxLook = Math.max(0, ...Object.values(plan));
-  const earliest = Math.min(w.startL, w.endL - maxLook * DAY);
-  const all = await loadItems(env, datesBetween(earliest, w.endL));
+  // Günlük bölümler pencere parçalarından; geri bakışlı bölümler küçük sec/<bölüm>.json dosyalarından.
+  const daily = secs.some((s) => !plan[s]);
+  const [shardItems, ...secFiles] = await Promise.all([
+    daily ? loadItems(env, datesBetween(w.startL, w.endL)) : [],
+    ...secs.filter((s) => plan[s]).map((s) => getJSON(env, `sec/${s}.json`)),
+  ]);
+  const seen = new Set(shardItems.map((i) => i.id));
+  const all = shardItems.concat(secFiles.filter(Boolean).flatMap((f) => f.items).filter((i) => !seen.has(i.id) && seen.add(i.id)));
   const langs = args.langs?.length ? new Set(args.langs) : null;
   const max = args.max_per_section ?? 20;
   const sumChars = args.summary_chars ?? 110;

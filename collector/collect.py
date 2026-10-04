@@ -119,14 +119,18 @@ def fetch_gdelt(cfg: dict, now: datetime) -> tuple[list[dict], list[dict]]:
     items, healths = [], []
     for i, q in enumerate(g.get("queries", [])):
         if i:
-            time.sleep(6)  # GDELT: ~5 sn'de bir istek
+            time.sleep(12)  # GDELT paylaşımlı IP'lerde sıkı hız sınırı uygular
         h = {"id": q["id"], "lang": "multi", "ok": False, "n": 0}
         params = {"query": q["query"], "mode": "ArtList", "format": "json",
                   "maxrecords": g.get("maxrecords", 40), "timespan": g.get("timespan", "1d"),
                   "sort": "DateDesc"}
         try:
-            r = requests.get(GDELT_URL, params=params, headers={"User-Agent": UA},
-                             timeout=cfg["settings"]["request_timeout"])
+            for attempt in range(2):
+                r = requests.get(GDELT_URL, params=params, headers={"User-Agent": UA},
+                                 timeout=cfg["settings"]["request_timeout"])
+                if r.status_code != 429:
+                    break
+                time.sleep(30 * (attempt + 1))
             r.raise_for_status()
             try:
                 data = r.json()
@@ -204,6 +208,22 @@ def merge(items: list[dict], cfg: dict, now: datetime) -> dict[str, int]:
     return stats
 
 
+def write_section_files(cfg: dict, now: datetime) -> None:
+    """Geri bakışlı bölümler (lookback_days) için data/sec/<bölüm>.json yazar."""
+    secdir = DATA / "sec"
+    secdir.mkdir(exist_ok=True)
+    shards = [json.loads(p.read_text("utf-8"))["items"] for p in sorted(DATA.glob("????-??-??.json"))]
+    for sec, rule in cfg["schedule"].items():
+        look = (rule or {}).get("lookback_days") if isinstance(rule, dict) else None
+        if not look:
+            continue
+        since = iso(now - timedelta(days=look + 1))
+        items = [i for sh in shards for i in sh if sec in i["sec"] and i["d"] >= since]
+        items.sort(key=lambda x: x["d"], reverse=True)
+        (secdir / f"{sec}.json").write_text(
+            json.dumps({"section": sec, "items": items}, ensure_ascii=False, separators=(",", ":")), "utf-8")
+
+
 def main() -> int:
     cfg = yaml.safe_load((ROOT / "sources.yaml").read_text("utf-8"))
     DATA.mkdir(exist_ok=True)
@@ -219,6 +239,7 @@ def main() -> int:
     healths += g_health
 
     stats = merge(items, cfg, now)
+    write_section_files(cfg, now)
 
     (DATA / "config.json").write_text(json.dumps({
         "generated": iso(now),
