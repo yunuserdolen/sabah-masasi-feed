@@ -1,0 +1,11 @@
+name = "sabah-masasi-feed"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+[vars]
+# KULLANICI ve REPO'yu kendi GitHub bilgilerinle değiştir.
+DATA_BASE = "https://raw.githubusercontent.com/yunuserdolen/sabah-masasi-feed/data"
+
+# Gizli değerler (dosyaya yazılmaz):
+#   npx wrangler secret put ACCESS_KEY      → zorunlu, uzun rastgele dize
+#   npx wrangler secret put GITHUB_TOKEN    → yalnız repo private ise (salt-okunur PAT)

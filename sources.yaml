@@ -1,0 +1,217 @@
+# ─────────────────────────────────────────────────────────────────────
+# SABAH MASASI — KATMAN 1 KAYNAK LİSTESİ
+#
+# type: rss   → doğrudan RSS/Atom adresi (url)
+# type: gnews → Google News RSS araması (q). RSS'i olmayan yayınlar için
+#               "site:alanadi when:1d", konu taramaları için anahtar kelime.
+# leaning (eğilim) kodları — kaba etiketlerdir, dilediğin gibi düzelt:
+#   sol, msol (merkez-sol), liberal, merkez, msag (merkez-sağ), sag,
+#   ulusalci, hukumet (hükümete yakın), devlet (devlet ajansı/fonlu),
+#   kamu (kamu yayıncısı), bagimsiz, karisik (konu taraması, çok kaynak)
+#
+# NOT: Adreslerin bir kısmı zamanla değişir. Her çalışmadan sonra
+# health.json'da (ve MCP'deki feed_health aracında) çalışmayanlar listelenir.
+# ─────────────────────────────────────────────────────────────────────
+
+settings:
+  tz_offset_hours: 3              # İstanbul (UTC+3, yaz saati yok)
+  retention_days: 9               # Cuma'nın 7 günlük geri bakışı için
+  max_items_per_feed_per_day: 15  # kaynak başına günlük tavan (denge + boyut)
+  summary_chars: 160
+  request_timeout: 20
+
+# Hangi bölüm hangi gün digest'e girer (1=Pzt … 5=Cum).
+# Bu tablo promptundaki takvimi aynalar; prompt değişirse burayı güncelle.
+schedule:
+  turkiye:             {days: [1, 2, 3, 4, 5]}
+  koseyazarlari:       {days: [1, 2, 3, 4, 5]}   # geniş tarama Pzt/Per — derinlik promptta
+  dunya:               {days: [1, 2, 3, 4, 5]}
+  hukuk:               {days: [1, 2, 3, 4, 5]}
+  fikir:               {days: [1, 2, 3, 4, 5]}
+  secim_abd:           {days: [3], until: "2026-11-30", lookback_days: 7}
+  secim_israil:        {days: [3], until: "2026-11-30", lookback_days: 7}
+  secim_fransa:        {days: [3], until: "2026-11-30", lookback_days: 7}
+  secim_brezilya:      {days: [3], until: "2026-11-30", lookback_days: 7}
+  abd_sol:             {days: [4], lookback_days: 7}
+  teknoloji_guc:       {days: [4], lookback_days: 7}
+  dusunce_kuruluslari: {days: [5], lookback_days: 7}
+  kultur:              {days: [5], lookback_days: 7}
+  istanbul:            {days: [5], lookback_days: 7}
+  turkiye_dis_basin:   {days: [5], lookback_days: 7}
+
+gnews_locales:
+  tr: {hl: tr, gl: TR, ceid: "TR:tr"}
+  en: {hl: en-US, gl: US, ceid: "US:en"}
+  fr: {hl: fr, gl: FR, ceid: "FR:fr"}
+  de: {hl: de, gl: DE, ceid: "DE:de"}
+  es: {hl: es, gl: ES, ceid: "ES:es"}
+  ar: {hl: ar, gl: EG, ceid: "EG:ar"}
+  zh: {hl: zh-CN, gl: CN, ceid: "CN:zh-Hans"}
+  he: {hl: iw, gl: IL, ceid: "IL:iw"}
+
+feeds:
+  # ── TÜRKİYE ───────────────────────────────────────────────────────
+  - {id: serbestiyet, type: rss, url: "https://serbestiyet.com/feed/", name: Serbestiyet, lang: tr, leaning: liberal, sections: [turkiye, koseyazarlari]}
+  - {id: medyascope, type: rss, url: "https://medyascope.tv/feed/", name: Medyascope, lang: tr, leaning: bagimsiz, sections: [turkiye]}
+  - {id: t24, type: rss, url: "https://t24.com.tr/rss", name: T24, lang: tr, leaning: msol, sections: [turkiye]}
+  - {id: bbc-turkce, type: rss, url: "https://feeds.bbci.co.uk/turkce/rss.xml", name: BBC Türkçe, lang: tr, leaning: kamu, sections: [turkiye, dunya]}
+  - {id: dw-turkce, type: rss, url: "https://rss.dw.com/rdf/rss-tur-all", name: DW Türkçe, lang: tr, leaning: kamu, sections: [turkiye, dunya]}
+  - {id: aa, type: rss, url: "https://www.aa.com.tr/tr/rss/default?cat=guncel", name: Anadolu Ajansı, lang: tr, leaning: devlet, sections: [turkiye]}
+  - {id: gn-bianet, type: gnews, q: "site:bianet.org when:1d", name: Bianet, lang: tr, leaning: sol, sections: [turkiye]}
+  - {id: gn-kisadalga, type: gnews, q: "site:kisadalga.net when:1d", name: Kısa Dalga, lang: tr, leaning: bagimsiz, sections: [turkiye]}
+  - {id: gn-karar, type: gnews, q: "site:karar.com when:1d", name: Karar, lang: tr, leaning: msag, sections: [turkiye]}
+  - {id: gn-cumhuriyet, type: gnews, q: "site:cumhuriyet.com.tr when:1d", name: Cumhuriyet, lang: tr, leaning: msol, sections: [turkiye]}
+  - {id: gn-sozcu, type: gnews, q: "site:sozcu.com.tr when:1d", name: Sözcü, lang: tr, leaning: ulusalci, sections: [turkiye]}
+  - {id: gn-haberturk, type: gnews, q: "site:haberturk.com when:1d", name: Habertürk, lang: tr, leaning: merkez, sections: [turkiye]}
+  - {id: gn-sabah, type: gnews, q: "site:sabah.com.tr when:1d", name: Sabah, lang: tr, leaning: hukumet, sections: [turkiye]}
+  - {id: gn-yenisafak, type: gnews, q: "site:yenisafak.com when:1d", name: Yeni Şafak, lang: tr, leaning: hukumet, sections: [turkiye]}
+
+  # ── KÖŞE YAZARLARI ────────────────────────────────────────────────
+  - {id: gn-t24-yazar, type: gnews, q: "site:t24.com.tr/yazarlar when:1d", name: T24 Yazarlar, lang: tr, leaning: msol, sections: [koseyazarlari]}
+  - {id: gn-karar-yazar, type: gnews, q: "site:karar.com/yazarlar when:1d", name: Karar Yazarlar, lang: tr, leaning: msag, sections: [koseyazarlari]}
+  - {id: gn-cumhuriyet-yazar, type: gnews, q: "site:cumhuriyet.com.tr/yazarlar when:1d", name: Cumhuriyet Yazarlar, lang: tr, leaning: msol, sections: [koseyazarlari]}
+  - {id: gn-sabah-yazar, type: gnews, q: "site:sabah.com.tr/yazarlar when:1d", name: Sabah Yazarlar, lang: tr, leaning: hukumet, sections: [koseyazarlari]}
+  - {id: gn-yenisafak-yazar, type: gnews, q: "site:yenisafak.com/yazarlar when:1d", name: Yeni Şafak Yazarlar, lang: tr, leaning: hukumet, sections: [koseyazarlari]}
+
+  # ── DÜNYA: İngilizce ──────────────────────────────────────────────
+  - {id: guardian-world, type: rss, url: "https://www.theguardian.com/world/rss", name: The Guardian, lang: en, leaning: msol, sections: [dunya]}
+  - {id: nyt-world, type: rss, url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", name: NYT World, lang: en, leaning: msol, sections: [dunya]}
+  - {id: bbc-world, type: rss, url: "https://feeds.bbci.co.uk/news/world/rss.xml", name: BBC World, lang: en, leaning: kamu, sections: [dunya]}
+  - {id: aljazeera-en, type: rss, url: "https://www.aljazeera.com/xml/rss/all.xml", name: Al Jazeera English, lang: en, leaning: devlet, sections: [dunya]}
+  - {id: foreignpolicy, type: rss, url: "https://foreignpolicy.com/feed/", name: Foreign Policy, lang: en, leaning: merkez, sections: [dunya]}
+  - {id: gn-reuters, type: gnews, q: "site:reuters.com/world when:1d", name: Reuters, lang: en, leaning: merkez, sections: [dunya]}
+  - {id: gn-wsj-world, type: gnews, q: "site:wsj.com/world when:1d", name: WSJ, lang: en, leaning: msag, sections: [dunya]}
+  - {id: timesofisrael, type: rss, url: "https://www.timesofisrael.com/feed/", name: Times of Israel, lang: en, leaning: merkez, sections: [dunya, secim_israil]}
+
+  # ── DÜNYA: Fransızca ──────────────────────────────────────────────
+  - {id: lemonde-une, type: rss, url: "https://www.lemonde.fr/rss/une.xml", name: Le Monde, lang: fr, leaning: msol, sections: [dunya]}
+  - {id: lemonde-intl, type: rss, url: "https://www.lemonde.fr/international/rss_full.xml", name: Le Monde International, lang: fr, leaning: msol, sections: [dunya]}
+  - {id: liberation, type: rss, url: "https://www.liberation.fr/arc/outboundfeeds/rss/?outputType=xml", name: Libération, lang: fr, leaning: sol, sections: [dunya]}
+  - {id: lefigaro, type: rss, url: "https://www.lefigaro.fr/rss/figaro_actualites.xml", name: Le Figaro, lang: fr, leaning: msag, sections: [dunya]}
+
+  # ── DÜNYA: Almanca ────────────────────────────────────────────────
+  - {id: faz, type: rss, url: "https://www.faz.net/rss/aktuell/", name: FAZ, lang: de, leaning: msag, sections: [dunya]}
+  - {id: sz, type: rss, url: "https://rss.sueddeutsche.de/rss/Topthemen", name: Süddeutsche, lang: de, leaning: msol, sections: [dunya]}
+  - {id: spiegel, type: rss, url: "https://www.spiegel.de/schlagzeilen/index.rss", name: Der Spiegel, lang: de, leaning: msol, sections: [dunya]}
+  - {id: zeit, type: rss, url: "https://newsfeed.zeit.de/index", name: Die Zeit, lang: de, leaning: msol, sections: [dunya, fikir]}
+  - {id: taz, type: rss, url: "https://taz.de/!p4608;rss/", name: taz, lang: de, leaning: sol, sections: [dunya]}
+
+  # ── DÜNYA: İspanyolca ─────────────────────────────────────────────
+  - {id: elpais, type: rss, url: "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada", name: El País, lang: es, leaning: msol, sections: [dunya]}
+  - {id: elmundo, type: rss, url: "https://e00-elmundo.uecdn.es/elmundo/rss/portada.xml", name: El Mundo, lang: es, leaning: msag, sections: [dunya]}
+  - {id: eldiario, type: rss, url: "https://www.eldiario.es/rss/", name: elDiario.es, lang: es, leaning: sol, sections: [dunya]}
+
+  # ── DÜNYA: Arapça ─────────────────────────────────────────────────
+  - {id: bbc-arabic, type: rss, url: "https://feeds.bbci.co.uk/arabic/rss.xml", name: BBC Arabic, lang: ar, leaning: kamu, sections: [dunya]}
+  - {id: aawsat, type: rss, url: "https://aawsat.com/feed", name: Asharq Al-Awsat, lang: ar, leaning: devlet, sections: [dunya]}
+  - {id: alquds, type: rss, url: "https://www.alquds.co.uk/feed/", name: Al-Quds Al-Arabi, lang: ar, leaning: bagimsiz, sections: [dunya]}
+  - {id: gn-aljazeera-ar, type: gnews, q: "site:aljazeera.net when:1d", name: الجزيرة, lang: ar, leaning: devlet, sections: [dunya]}
+
+  # ── DÜNYA: Çince ──────────────────────────────────────────────────
+  - {id: bbc-zhongwen, type: rss, url: "https://feeds.bbci.co.uk/zhongwen/simp/rss.xml", name: BBC 中文, lang: zh, leaning: kamu, sections: [dunya]}
+  - {id: dw-chinese, type: rss, url: "https://rss.dw.com/rdf/rss-chi-all", name: DW 中文, lang: zh, leaning: kamu, sections: [dunya]}
+  - {id: gn-infzm, type: gnews, q: "site:infzm.com when:2d", name: 南方周末, lang: zh, leaning: merkez, sections: [dunya, fikir]}
+  - {id: gn-zaobao, type: gnews, q: "site:zaobao.com.sg when:1d", name: 联合早报, lang: zh, leaning: merkez, sections: [dunya]}
+  - {id: gn-initium, type: gnews, q: "site:theinitium.com when:2d", name: 端传媒, lang: zh, leaning: bagimsiz, sections: [dunya]}
+  - {id: gn-peopledaily, type: gnews, q: "site:people.com.cn when:1d", name: 人民日报, lang: zh, leaning: devlet, sections: [dunya]}
+
+  # ── DÜNYA: İbranice ───────────────────────────────────────────────
+  - {id: ynet, type: rss, url: "https://www.ynet.co.il/Integration/StoryRss2.xml", name: Ynet, lang: he, leaning: merkez, sections: [dunya]}
+  - {id: gn-haaretz-he, type: gnews, q: "site:haaretz.co.il when:1d", name: הארץ, lang: he, leaning: msol, sections: [dunya]}
+  - {id: gn-israelhayom, type: gnews, q: "site:israelhayom.co.il when:1d", name: ישראל היום, lang: he, leaning: sag, sections: [dunya]}
+
+  # ── HUKUK ─────────────────────────────────────────────────────────
+  - {id: verfassungsblog, type: rss, url: "https://verfassungsblog.de/feed/", name: Verfassungsblog, lang: en, leaning: bagimsiz, sections: [hukuk]}
+  - {id: scotusblog, type: rss, url: "https://www.scotusblog.com/feed/", name: SCOTUSblog, lang: en, leaning: bagimsiz, sections: [hukuk]}
+  - {id: gn-lawfare, type: gnews, q: "site:lawfaremedia.org when:2d", name: Lawfare, lang: en, leaning: merkez, sections: [hukuk]}
+  - {id: gn-aym, type: gnews, q: "\"Anayasa Mahkemesi\" when:1d", lang: tr, leaning: karisik, sections: [hukuk]}
+  - {id: gn-aihm, type: gnews, q: "AİHM Türkiye when:1d", lang: tr, leaning: karisik, sections: [hukuk]}
+  - {id: gn-echr, type: gnews, q: "\"European Court of Human Rights\" when:1d", lang: en, leaning: karisik, sections: [hukuk]}
+  - {id: gn-conseil-const, type: gnews, q: "\"Conseil constitutionnel\" when:2d", lang: fr, leaning: karisik, sections: [hukuk]}
+  - {id: gn-bverfg, type: gnews, q: "Bundesverfassungsgericht when:2d", lang: de, leaning: karisik, sections: [hukuk]}
+
+  # ── FİKİR / UZUN FORM ─────────────────────────────────────────────
+  - {id: newyorker, type: rss, url: "https://www.newyorker.com/feed/everything", name: The New Yorker, lang: en, leaning: msol, sections: [fikir, kultur]}
+  - {id: atlantic, type: rss, url: "https://www.theatlantic.com/feed/all/", name: The Atlantic, lang: en, leaning: merkez, sections: [fikir]}
+  - {id: nybooks, type: rss, url: "https://www.nybooks.com/feed/", name: NY Review of Books, lang: en, leaning: msol, sections: [fikir, kultur]}
+  - {id: gn-lrb, type: gnews, q: "site:lrb.co.uk when:3d", name: London Review of Books, lang: en, leaning: sol, sections: [fikir, kultur]}
+  - {id: gn-equator, type: gnews, q: "site:equator.org when:7d", name: Equator, lang: en, leaning: sol, sections: [fikir]}   # alan adını doğrula
+  - {id: legrandcontinent, type: rss, url: "https://legrandcontinent.eu/fr/feed/", name: Le Grand Continent, lang: fr, leaning: merkez, sections: [fikir]}
+  - {id: mondediplo, type: rss, url: "https://www.monde-diplomatique.fr/recents.xml", name: Le Monde diplomatique, lang: fr, leaning: sol, sections: [fikir]}
+  - {id: gn-aoc, type: gnews, q: "site:aoc.media when:3d", name: AOC, lang: fr, leaning: msol, sections: [fikir]}
+  - {id: gn-merkur, type: gnews, q: "site:merkur-zeitschrift.de when:7d", name: Merkur, lang: de, leaning: liberal, sections: [fikir]}
+
+  # ── SEÇİM MASALARI (Çarşamba) ─────────────────────────────────────
+  - {id: politico, type: rss, url: "https://rss.politico.com/politics-news.xml", name: Politico, lang: en, leaning: merkez, sections: [secim_abd]}
+  - {id: silverbulletin, type: rss, url: "https://www.natesilver.net/feed", name: Silver Bulletin, lang: en, leaning: merkez, sections: [secim_abd]}
+  - {id: nationalreview, type: rss, url: "https://www.nationalreview.com/feed/", name: National Review, lang: en, leaning: sag, sections: [secim_abd]}
+  - {id: gn-cook, type: gnews, q: "site:cookpolitical.com when:7d", name: Cook Political Report, lang: en, leaning: merkez, sections: [secim_abd]}
+  - {id: gn-senate-polls, type: gnews, q: "Senate race poll when:3d", lang: en, leaning: karisik, sections: [secim_abd]}
+  - {id: gn-midterms, type: gnews, q: "midterm elections 2026 when:2d", lang: en, leaning: karisik, sections: [secim_abd]}
+  - {id: gn-isr-elex-he, type: gnews, q: "בחירות 2026 when:2d", lang: he, leaning: karisik, sections: [secim_israil]}
+  - {id: gn-isr-elex-en, type: gnews, q: "Israel election poll when:3d", lang: en, leaning: karisik, sections: [secim_israil]}
+  - {id: gn-fr-elex, type: gnews, q: "présidentielle 2027 sondage when:3d", lang: fr, leaning: karisik, sections: [secim_fransa]}
+  - {id: gn-fr-politique, type: gnews, q: "élections législatives OR municipales when:3d", lang: fr, leaning: karisik, sections: [secim_fransa]}
+  - {id: gn-br-elex-en, type: gnews, q: "Brazil election Lula when:2d", lang: en, leaning: karisik, sections: [secim_brezilya]}
+  - {id: gn-br-elex-es, type: gnews, q: "elecciones Brasil when:2d", lang: es, leaning: karisik, sections: [secim_brezilya]}
+  - {id: gn-br-elex-fr, type: gnews, q: "Brésil élection when:3d", lang: fr, leaning: karisik, sections: [secim_brezilya]}
+
+  # ── ABD SOLU (Perşembe) ───────────────────────────────────────────
+  - {id: jacobin, type: rss, url: "https://jacobin.com/feed", name: Jacobin, lang: en, leaning: sol, sections: [abd_sol, fikir]}
+  - {id: thenation, type: rss, url: "https://www.thenation.com/feed/?post_type=article", name: The Nation, lang: en, leaning: sol, sections: [abd_sol]}
+  - {id: dissent, type: rss, url: "https://www.dissentmagazine.org/feed", name: Dissent, lang: en, leaning: sol, sections: [abd_sol]}
+  - {id: gn-prospect, type: gnews, q: "site:prospect.org when:7d", name: American Prospect, lang: en, leaning: sol, sections: [abd_sol]}
+  - {id: gn-tnr, type: gnews, q: "site:newrepublic.com when:7d", name: The New Republic, lang: en, leaning: msol, sections: [abd_sol]}
+
+  # ── TEKNOLOJİ VE GÜÇ (Perşembe) ───────────────────────────────────
+  - {id: gn-palantir, type: gnews, q: "Palantir OR \"Peter Thiel\" when:7d", lang: en, leaning: karisik, sections: [teknoloji_guc]}
+  - {id: gn-antitrust, type: gnews, q: "antitrust \"Big Tech\" OR \"Lina Khan\" when:7d", lang: en, leaning: karisik, sections: [teknoloji_guc]}
+  - {id: gn-surveillance, type: gnews, q: "surveillance technology government when:7d", lang: en, leaning: karisik, sections: [teknoloji_guc]}
+  - {id: gn-vance-tech, type: gnews, q: "Vance Silicon Valley when:7d", lang: en, leaning: karisik, sections: [teknoloji_guc]}
+
+  # ── DÜŞÜNCE KURULUŞLARI (Cuma) — ECFR bilinçli olarak yok ─────────
+  - {id: brookings, type: rss, url: "https://www.brookings.edu/feed/", name: Brookings, lang: en, leaning: merkez, sections: [dusunce_kuruluslari]}
+  - {id: gn-carnegie, type: gnews, q: "site:carnegieendowment.org when:7d", name: Carnegie, lang: en, leaning: merkez, sections: [dusunce_kuruluslari]}
+  - {id: gn-chatham, type: gnews, q: "site:chathamhouse.org when:7d", name: Chatham House, lang: en, leaning: merkez, sections: [dusunce_kuruluslari]}
+  - {id: gn-crisisgroup, type: gnews, q: "site:crisisgroup.org when:7d", name: Crisis Group, lang: en, leaning: merkez, sections: [dusunce_kuruluslari]}
+  - {id: gn-aei, type: gnews, q: "site:aei.org when:7d", name: AEI, lang: en, leaning: msag, sections: [dusunce_kuruluslari]}
+  - {id: gn-cato, type: gnews, q: "site:cato.org when:7d", name: Cato, lang: en, leaning: liberal, sections: [dusunce_kuruluslari]}
+  - {id: gn-swp, type: gnews, q: "site:swp-berlin.org when:7d", name: SWP, lang: de, leaning: merkez, sections: [dusunce_kuruluslari]}
+  - {id: gn-ifri, type: gnews, q: "site:ifri.org when:7d", name: IFRI, lang: fr, leaning: merkez, sections: [dusunce_kuruluslari]}
+  - {id: gn-edam, type: gnews, q: "site:edam.org.tr when:7d", name: EDAM, lang: tr, leaning: merkez, sections: [dusunce_kuruluslari]}
+  - {id: gn-seta, type: gnews, q: "site:setav.org when:7d", name: SETA, lang: tr, leaning: hukumet, sections: [dusunce_kuruluslari]}
+
+  # ── KÜLTÜR (Cuma) ─────────────────────────────────────────────────
+  - {id: gn-k24, type: gnews, q: "site:k24kitap.org when:7d", name: K24, lang: tr, leaning: bagimsiz, sections: [kultur]}
+  - {id: gn-lemonde-culture, type: gnews, q: "site:lemonde.fr/culture when:7d", name: Le Monde Culture, lang: fr, leaning: msol, sections: [kultur]}
+  - {id: gn-zeit-kultur, type: gnews, q: "site:zeit.de/kultur when:7d", name: Zeit Kultur, lang: de, leaning: msol, sections: [kultur]}
+
+  # ── TALK OF THE TOWN: İSTANBUL (Cuma) ─────────────────────────────
+  - {id: gn-ist-sergi, type: gnews, q: "İstanbul sergi açılış when:7d", lang: tr, leaning: karisik, sections: [istanbul]}
+  - {id: gn-ist-konser, type: gnews, q: "İstanbul konser OR festival when:7d", lang: tr, leaning: karisik, sections: [istanbul]}
+  - {id: gn-ist-tiyatro, type: gnews, q: "İstanbul tiyatro OR sinema gösterim when:7d", lang: tr, leaning: karisik, sections: [istanbul]}
+  - {id: gn-ist-restoran, type: gnews, q: "İstanbul yeni restoran OR açıldı when:7d", lang: tr, leaning: karisik, sections: [istanbul]}
+
+  # ── TÜRKİYE DIŞ BASINDA (Cuma, 7 gün) ─────────────────────────────
+  - {id: gn-tdb-en, type: gnews, q: "Turkey Erdogan when:7d", lang: en, leaning: karisik, sections: [turkiye_dis_basin]}
+  - {id: gn-tdb-fr, type: gnews, q: "Turquie Erdogan when:7d", lang: fr, leaning: karisik, sections: [turkiye_dis_basin]}
+  - {id: gn-tdb-de, type: gnews, q: "Türkei Erdoğan when:7d", lang: de, leaning: karisik, sections: [turkiye_dis_basin]}
+  - {id: gn-tdb-es, type: gnews, q: "Turquía Erdogan when:7d", lang: es, leaning: karisik, sections: [turkiye_dis_basin]}
+  - {id: gn-tdb-ar, type: gnews, q: "تركيا أردوغان when:7d", lang: ar, leaning: karisik, sections: [turkiye_dis_basin]}
+  - {id: gn-tdb-zh, type: gnews, q: "土耳其 埃尔多安 when:7d", lang: zh, leaning: karisik, sections: [turkiye_dis_basin]}
+  - {id: gn-tdb-he, type: gnews, q: "טורקיה ארדואן when:7d", lang: he, leaning: karisik, sections: [turkiye_dis_basin]}
+
+# ── GDELT DOC 2.0 (ücretsiz, çok dilli; Google News'te zayıf kalan
+# dillerde tamamlayıcı). Sorgular İngilizce anahtar kelime + sourcelang
+# filtresiyle çalışır; başlıklar özgün dilde gelir. İstekler arası 6 sn.
+gdelt:
+  timespan: 1d
+  maxrecords: 40
+  queries:
+    - {id: gd-turkey-ar, query: "Turkey sourcelang:arabic", sections: [turkiye_dis_basin, dunya]}
+    - {id: gd-turkey-zh, query: "Turkey sourcelang:chinese", sections: [turkiye_dis_basin, dunya]}
+    - {id: gd-turkey-he, query: "Turkey sourcelang:hebrew", sections: [turkiye_dis_basin, dunya]}
+    - {id: gd-isr-elex, query: "election Knesset sourcelang:hebrew", sections: [secim_israil]}
+    - {id: gd-br-elex-es, query: "Brazil election sourcelang:spanish", sections: [secim_brezilya]}
+    - {id: gd-aym, query: "\"Constitutional Court\" Turkey", sections: [hukuk]}
+    - {id: gd-polban, query: "(\"political ban\" OR \"banned from politics\" OR \"barred from running\")", sections: [hukuk]}
