@@ -1,0 +1,125 @@
+{
+ "generated": "2026-10-10T22:29:43Z",
+ "tz_offset_hours": 3,
+ "schedule": {
+  "turkiye": {
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "koseyazarlari": {
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "dunya": {
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "hukuk": {
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "fikir": {
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "secim_abd": {
+   "days": [
+    3
+   ],
+   "until": "2026-11-30",
+   "lookback_days": 7
+  },
+  "secim_israil": {
+   "days": [
+    3
+   ],
+   "until": "2026-11-30",
+   "lookback_days": 7
+  },
+  "secim_fransa": {
+   "days": [
+    3
+   ],
+   "until": "2026-11-30",
+   "lookback_days": 7
+  },
+  "secim_brezilya": {
+   "days": [
+    3
+   ],
+   "until": "2026-11-30",
+   "lookback_days": 7
+  },
+  "abd_sol": {
+   "days": [
+    4
+   ],
+   "lookback_days": 7
+  },
+  "teknoloji_guc": {
+   "days": [
+    4
+   ],
+   "lookback_days": 7
+  },
+  "dusunce_kuruluslari": {
+   "days": [
+    5
+   ],
+   "lookback_days": 7
+  },
+  "kultur": {
+   "days": [
+    5
+   ],
+   "lookback_days": 7
+  },
+  "istanbul": {
+   "days": [
+    5
+   ],
+   "lookback_days": 7
+  },
+  "turkiye_dis_basin": {
+   "days": [
+    5
+   ],
+   "lookback_days": 7
+  }
+ },
+ "langs": [
+  "tr",
+  "en",
+  "fr",
+  "de",
+  "es",
+  "ar",
+  "zh",
+  "he"
+ ]
+}
