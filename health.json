@@ -1,0 +1,78 @@
+{
+ "generated": "2026-11-21T12:42:01Z",
+ "shards": {
+  "2026-11-21": 828,
+  "2026-11-20": 1209,
+  "2026-11-18": 1246,
+  "2026-11-15": 1019,
+  "2026-11-14": 1138,
+  "2026-11-12": 1276,
+  "2026-11-19": 1264,
+  "2026-11-17": 1240,
+  "2026-11-16": 1211,
+  "2026-11-13": 1266
+ },
+ "failing": [
+  {
+   "id": "gn-cumhuriyet-yazar",
+   "lang": "tr",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=site%3Acumhuriyet.com.tr%2Fyazarlar+when%3A1d&hl=tr&gl=TR&ceid=TR%3Atr"
+  },
+  {
+   "id": "gn-haaretz-he",
+   "lang": "he",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=site%3Ahaaretz.co.il+when%3A1d&hl=iw&gl=IL&ceid=IL%3Aiw"
+  },
+  {
+   "id": "gn-aihm",
+   "lang": "tr",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=A%C4%B0HM+T%C3%BCrkiye+when%3A1d&hl=tr&gl=TR&ceid=TR%3Atr"
+  },
+  {
+   "id": "gn-lrb",
+   "lang": "en",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=site%3Alrb.co.uk+when%3A3d&hl=en-US&gl=US&ceid=US%3Aen"
+  },
+  {
+   "id": "mondediplo",
+   "lang": "fr",
+   "ok": false,
+   "n": 0,
+   "error": "404 Client Error: Not Found for url: https://www.monde-diplomatique.fr/recents.xml"
+  },
+  {
+   "id": "gn-aoc",
+   "lang": "fr",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=site%3Aaoc.media+when%3A3d&hl=fr&gl=FR&ceid=FR%3Afr"
+  },
+  {
+   "id": "gn-k24",
+   "lang": "tr",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=site%3Ak24kitap.org+when%3A7d&hl=tr&gl=TR&ceid=TR%3Atr"
+  },
+  {
+   "id": "gn-ist-tiyatro",
+   "lang": "tr",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=%C4%B0stanbul+tiyatro+OR+sinema+g%C3%B6sterim+when%3A7d&hl=tr&gl=TR&ceid=TR%3Atr"
+  }
+ ],
+ "empty": [
+  "gn-equator"
+ ],
+ "ok_count": 107,
+ "total": 115
+}
