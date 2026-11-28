@@ -1,0 +1,85 @@
+{
+ "generated": "2026-11-28T13:02:08Z",
+ "shards": {
+  "2026-11-28": 789,
+  "2026-11-27": 1145,
+  "2026-11-26": 1187,
+  "2026-11-23": 1232,
+  "2026-11-25": 1305,
+  "2026-11-24": 1244,
+  "2026-11-21": 1115,
+  "2026-11-22": 1032,
+  "2026-11-20": 1284,
+  "2026-11-19": 1303
+ },
+ "failing": [
+  {
+   "id": "gn-kisadalga",
+   "lang": "tr",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=site%3Akisadalga.net+when%3A1d&hl=tr&gl=TR&ceid=TR%3Atr"
+  },
+  {
+   "id": "gn-cumhuriyet-yazar",
+   "lang": "tr",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=site%3Acumhuriyet.com.tr%2Fyazarlar+when%3A1d&hl=tr&gl=TR&ceid=TR%3Atr"
+  },
+  {
+   "id": "guardian-world",
+   "lang": "en",
+   "ok": false,
+   "n": 0,
+   "error": "403 Client Error: Forbidden for url: https://www.theguardian.com/world/rss"
+  },
+  {
+   "id": "gn-haaretz-he",
+   "lang": "he",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=site%3Ahaaretz.co.il+when%3A1d&hl=iw&gl=IL&ceid=IL%3Aiw"
+  },
+  {
+   "id": "gn-aihm",
+   "lang": "tr",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=A%C4%B0HM+T%C3%BCrkiye+when%3A1d&hl=tr&gl=TR&ceid=TR%3Atr"
+  },
+  {
+   "id": "mondediplo",
+   "lang": "fr",
+   "ok": false,
+   "n": 0,
+   "error": "404 Client Error: Not Found for url: https://www.monde-diplomatique.fr/recents.xml"
+  },
+  {
+   "id": "gn-senate-polls",
+   "lang": "en",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=Senate+race+poll+when%3A3d&hl=en-US&gl=US&ceid=US%3Aen"
+  },
+  {
+   "id": "gn-prospect",
+   "lang": "en",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=site%3Aprospect.org+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+  },
+  {
+   "id": "gn-palantir",
+   "lang": "en",
+   "ok": false,
+   "n": 0,
+   "error": "429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=Palantir+OR+%22Peter+Thiel%22+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+  }
+ ],
+ "empty": [
+  "gn-equator"
+ ],
+ "ok_count": 106,
+ "total": 115
+}
